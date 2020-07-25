@@ -1,0 +1,11 @@
+{
+  "name": "AskBlitzcrank",
+  "version": "1.0.0",
+  "description": "Ask Blitzcrank about your opponents or the weather!",
+  "main": "bot.js",
+  "author": "Connor Jesssup",
+  "dependencies": {
+    "discord.io": "github:woor/discord.io#gateway_v6",
+    "winston": "^3.3.3"
+  }
+}
