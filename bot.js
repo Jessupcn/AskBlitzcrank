@@ -1,6 +1,11 @@
 const Discord = require('discord.io');
 const logger = require('winston');
 const auth = require('./auth.json');
+const discordToken = process.env.DISCORD_TOKEN;
+
+console.log(process.env.LOL_API_KEY);
+console.log(discordToken);
+console.log(auth.token);
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -30,12 +35,24 @@ bot.on('message', function (user, userID, channelID, message, evt) {
     const cmd = args[0];
 
     args = args.splice(1);
-    switch (cmd) {
-      // !ping
-      case 'ping':
+    console.log(args);
+    switch (cmd.toLowerCase()) {
+      case 'commands':
         bot.sendMessage({
           to: channelID,
-          message: 'Pong!',
+          message: `hello\nsearch {summonerName}\nhook {user}`,
+        });
+        break;
+      case 'hello':
+        bot.sendMessage({
+          to: channelID,
+          message: 'Fired up!',
+        });
+        break;
+      case 'hook':
+        bot.sendMessage({
+          to: channelID,
+          message: `Blitzcrank hooked ${args[0]}\n\n...\n\n he dead.`,
         });
         break;
       // Just add any case commands if you want to..
