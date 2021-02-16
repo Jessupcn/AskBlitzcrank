@@ -94,6 +94,10 @@ bot.on('message', async (user, userID, channelID, message, evt) => {
         break;
       // Just add any case commands if you want to..
       default:
+        bot.sendMessage({
+          to: channelID,
+          message: `Use $commands to read Blitzcrank's manual.`,
+        });
         break;
     }
   }
