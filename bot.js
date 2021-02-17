@@ -1,12 +1,13 @@
 const Discord = require('discord.io');
 const logger = require('winston');
-const axios = require('axios');
 const auth = require('./auth.json');
-const domain = require('./domain.js');
-const { getSummonerObj, getSummonerMatches } = require('./summoner.js');
+const { getSummonerObj, getSummonerMatches, analyzeRecentMatches } = require('./summoner.js');
 const { getMatchData } = require('./match.js');
+const fetchChampions = require('./utils/fetchChampions');
+const championsCache = require('./utils/championCache');
 
-const discordToken = process.env.DISCORD_TOKEN;
+// set up tokens from env or local auth file
+const discordToken = process.env.DISCORD_TOKEN || auth.token;
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -17,18 +18,21 @@ logger.level = 'debug';
 
 // Initialize Discord Bot
 var bot = new Discord.Client({
-  token: auth.token,
+  token: discordToken,
   autorun: true,
 });
 
-bot.on('ready', function (evt) {
-  logger.info('Connected');
+bot.on('ready', async (evt) => {
+  logger.info('Connected', evt);
   logger.info('Logged in as: ');
-  logger.info(bot.username + ' - (' + bot.id + ')');
+  logger.info(bot.username + ' - (' + bot.id + ')\n\n');
+  logger.info('Rocket grabbing champions data ~~~~c');
+  const response = await fetchChampions();
+  logger.info(response.status === 200 ? 'Champion data ready.' : 'Champion data grab failed.')
 });
 
-bot.on('message', async (user, userID, channelID, message, evt) => {
-  console.log('EVENT: ', evt);
+// eslint-disable-next-line complexity
+bot.on('message', async (user, userID, channelID, message, /* evt */) => {
   // Our bot needs to know if it will execute a command
   // It will listen for messages that will start with `!`
   if (message.substring(0, 1) === '$') {
@@ -52,49 +56,46 @@ bot.on('message', async (user, userID, channelID, message, evt) => {
       case 'hook':
         bot.sendMessage({
           to: channelID,
-          message: `Blitzcrank hooked ${args[0]}\n\n...\n\n s/he dead.`,
+          message: `Blitzcrank hooked ~-~-~-~-~-~c ${args[0]}\n\n...\n\n s/he dead.`,
         });
         break;
       case 'search':
         try {
-          const summoner = await getSummonerObj(args[0]);
-          console.log('SUMMONER -->', summoner);
-          const summonerId = summoner.accountId;
-
-          const matches = await getSummonerMatches(summonerId);
-          const last20 = matches.matches.slice(0, 20);
-          console.log('last 20: ', last20);
-          const match1 = await getMatchData(last20[0].gameId);
-          console.log(match1);
-
-          // const promiseArray = matches.matches.map((match) => {
-          //   return Promise.resolve(getMatchData(match.gameId));
-          // });
-
-          // // console.log(promiseArray[0]);
-          // const gameData = Promise.all(
-          //   matches.matches.map((match) => {
-          //     return getMatchData(match.gameId);
-          //   })
-          // );
-          // console.log('GameData 1', gameData[0]);
+          if (!args[0]) {
+            bot.sendMessage({
+              to: channelID,
+              message: `Please enter summoner name`,
+            });
+            break;
+          }
 
           bot.sendMessage({
             to: channelID,
-            message: ``,
+            message: `Grabbing ${args[0]}`,
+          });
+
+          const analysis = await analyzeRecentMatches(args[0])
+          console.log('ANALYSIS:', analysis);
+
+          bot.sendMessage({
+            to: channelID,
+            message: `blah blah`,
           });
         } catch (err) {
           console.error(err);
 
+          const errorMessage = err.response.status === 429
+              ? 'Please wait a minute, rate limit exceeded.'
+              : 'Something went wrong.'
+
           bot.sendMessage({
             to: channelID,
-            message: `We're sorry, something went wrong.`,
+            message: errorMessage,
           });
         }
         break;
       // Just add any case commands if you want to..
       default:
-        console.log('got to default case');
         bot.sendMessage({
           to: channelID,
           message: `Use $commands to read Blitzcrank's manual.`,
