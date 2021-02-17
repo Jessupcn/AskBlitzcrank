@@ -12,7 +12,7 @@ const {
 const championsCache = require('./championsCache')
 
 // set up tokens from env or local auth file
-const discordToken = process.env.DISCORD_TOKEN || auth.token;
+const discordToken = process.env.DISCORD_TOKEN || auth.discordToken;
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -195,8 +195,7 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
 
             [top, jungle, mid, carry, support].forEach(player => {
               const championPlayed = championsCache.get(String(player.championId))
-              responseMessage += `${player.role}: ${player.summoner.summonerName}\n`
-              responseMessage += `${championPlayed.id}    ${player.stats.kills}/${player.stats.deaths}/${player.stats.assists}\n\n`
+              responseMessage += `${player.role}: ${player.summoner.summonerName} - ${championPlayed.id}    ${player.stats.kills}/${player.stats.deaths}/${player.stats.assists}\n`
             })
 
             bot.sendMessage({

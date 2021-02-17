@@ -8,5 +8,8 @@
     "axios": "^0.21.1",
     "discord.io": "github:woor/discord.io#gateway_v6",
     "winston": "^3.3.3"
+  },
+  "scripts": {
+    "start": "node bot.js"
   }
 }
