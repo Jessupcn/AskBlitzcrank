@@ -1,15 +1,11 @@
 /* eslint-disable complexity */
-const {
-  championsCache,
-  getMatchData,
-  getSummonerByName,
-  getSummonerMatches,
-} = require('./')
+const getMatchData = require('./getMatchData')
+const { getSummonerByName, getSummonerMatches } = require('./summoner');
+const championsCache = require('../championsCache')
 
 const analyzeRecentMatches = async (summonerName) => {
   try {
     const summoner = await getSummonerByName(summonerName);
-    console.log('SUMMONER', summoner)
     const summonerMatches = await getSummonerMatches(summoner.accountId);
 
     const numRecentSummonerMatches = summonerMatches.matches.length;

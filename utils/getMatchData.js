@@ -1,6 +1,6 @@
 const axios = require('axios');
 const auth = require('../auth.json');
-const { domain } = require('./');
+const domain = require('./domain');
 
 const getMatchData = async (matchId) => {
   const summonerObj = await axios.get(

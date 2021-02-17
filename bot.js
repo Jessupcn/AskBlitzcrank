@@ -26,21 +26,33 @@ var bot = new Discord.Client({
   autorun: true,
 });
 
-bot.on('ready', async (evt) => {
-  logger.info('Connected', evt);
+bot.on('ready', async () => {
+  logger.info('Fired Up!');
   logger.info('Logged in as: ');
   logger.info(bot.username + ' - (' + bot.id + ')\n\n');
   logger.info('Rocket grabbing champions data ~~~~c');
+
   const response = await fetchChampions();
   logger.info(response.status === 200 ? 'Champion data ready.' : 'Champion data grab failed.')
-  // console.log(championsCache)
+
+  for (const server in bot.servers) {
+    if (bot.servers[server].channels) {
+      const channels = Object.keys(bot.servers[server].channels);
+      channels.forEach(channelId => {
+        bot.sendMessage({
+          to: channelId,
+          message: `Fired Up!`,
+        });
+      });
+    }
+  }
 });
 
 // eslint-disable-next-line complexity
 bot.on('message', async (user, userID, channelID, message, /* evt */) => {
   try {
     // Our bot needs to know if it will execute a command
-    // It will listen for messages that will start with `!`
+    // It will listen for messages that will start with `$`
     if (message.substring(0, 1) === '$') {
       let args = message.substring(1).split(' ');
       const cmd = args[0];
@@ -119,7 +131,34 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
                   const winLoss = champion[1];
                   responseMessage += `${championName}: ${winLoss.win} win${!winLoss.win || winLoss.win > 1 ? 's' : ''} - ${winLoss.loss} loss${!winLoss.loss || winLoss.loss > 1 ? 'es' : ''}\n`
                 })
-                responseMessage += '~-~-~-~-~-~-~-~-~-~-~-~-c'
+                responseMessage += '~-~-~-~-~-~-~-~-~-~-~-~-c\n'
+
+                // most played section
+                responseMessage += 'MOST PLAYED CHAMPIONS IN LAST 100 GAMES:\n'
+                Object.entries(trends.championTrend)
+                  .sort((championA, championB) => championB[1] - championA[1])
+                  .slice(0, 10)
+                  .forEach(([champion, played]) => {
+                    responseMessage += `${champion}: ${played} play${played > 1 ? 's' : ''}\n`
+                  })
+
+                responseMessage += '\nPOSITIONS:\n'
+                const { roleTrend, numRecentSummonerMatches } = trends;
+                if (roleTrend.top) {
+                  responseMessage += `Top: ${(roleTrend.top / numRecentSummonerMatches) * 100}%\n`
+                }
+                if (roleTrend.jungle) {
+                  responseMessage += `Jungle: ${(roleTrend.jungle / numRecentSummonerMatches) * 100}%\n`
+                }
+                if (roleTrend.mid) {
+                  responseMessage += `Mid: ${(roleTrend.mid / numRecentSummonerMatches) * 100}%\n`
+                }
+                if (roleTrend.carry) {
+                  responseMessage += `Carry: ${(roleTrend.carry / numRecentSummonerMatches) * 100}%\n`
+                }
+                if (roleTrend.support) {
+                  responseMessage += `Support: ${(roleTrend.support / numRecentSummonerMatches) * 100}%`
+                }
             }
 
             bot.sendMessage({
@@ -132,7 +171,24 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
           break;
         case 'mostRecent':
           try {
-            const response = await analyzeMostRecentMatch();
+            bot.sendMessage({
+              to: channelID,
+              message: `Grabbing ${args[0]}`,
+            });
+
+            const response = await analyzeMostRecentMatch(args[0]);
+          } catch (err) {
+            throw err
+          }
+          break;
+        case 'clashTeam':
+          try {
+            bot.sendMessage({
+              to: channelID,
+              message: `Grabbing ${args[0]}`,
+            });
+
+            const response = await analyzeMostRecentMatch(args[0]);
           } catch (err) {
             throw err
           }

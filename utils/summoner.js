@@ -1,9 +1,10 @@
 /* eslint-disable complexity */
 const axios = require('axios');
 const auth = require('../auth.json');
-const { domain } = require('./');
+const domain = require('./domain');
 
 const getSummonerByName = async (summonerName) => {
+  console.log('DOMAIN!', domain)
   try {
     const summonerObj = await axios.get(
       `${domain}/summoner/v4/summoners/by-name/${summonerName}?api_key=${auth.leagueToken}`
