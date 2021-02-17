@@ -1,6 +1,6 @@
 const axios = require('axios');
-const auth = require('./auth.json');
-const domain = require('./utils/domain.js');
+const auth = require('../auth.json');
+const { domain } = require('./');
 
 const getMatchData = async (matchId) => {
   const summonerObj = await axios.get(
@@ -9,4 +9,4 @@ const getMatchData = async (matchId) => {
   return summonerObj.data;
 };
 
-module.exports = { getMatchData };
+module.exports = getMatchData;

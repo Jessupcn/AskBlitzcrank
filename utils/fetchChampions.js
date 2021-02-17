@@ -1,5 +1,5 @@
 const axios = require('axios');
-const championsCache = require('./championCache');
+const { championsCache } = require('./index');
 
 const fetchChampions = async () => {
   try {
@@ -7,14 +7,17 @@ const fetchChampions = async () => {
 
     const championsData = response.data.data;
 
+    console.log('--> ', championsCache)
     for (let champion in championsData) {
       if (championsData[champion].id) {
         let currentChampion = championsData[champion];
         championsCache.set(currentChampion.key, currentChampion);
       }
     }
+    console.log('><><><><><><><><><<><>', championsCache)
     return response;
   } catch (err) {
+    console.log('this is where the error is')
     console.error(err);
     return err.response;
   }
