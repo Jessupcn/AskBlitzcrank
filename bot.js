@@ -9,6 +9,7 @@ const {
   analyzeMostRecentMatch,
   fetchChampions,
 } = require('./utils');
+const championsCache = require('./championsCache')
 
 // set up tokens from env or local auth file
 const discordToken = process.env.DISCORD_TOKEN || auth.token;
@@ -61,7 +62,7 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
         case 'commands':
           bot.sendMessage({
             to: channelID,
-            message: `hello\nsearch {summonerName}\nhook {user}`,
+            message: `hello\nsearch {summonerName}\nmostrecent {summonerName}\nhook {user}`,
           });
           break;
         case 'hello':
@@ -113,7 +114,6 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
             let responseMessage = ''
 
             const {trends, recentGames} = analysis;
-            console.log('TRENDS!!', trends);
 
             if (!trends.numRecentSummonerMatches) {
               responseMessage = 'No recent games found.'
@@ -169,7 +169,7 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
             throw err;
           }
           break;
-        case 'mostRecent':
+        case 'mostrecent':
           try {
             bot.sendMessage({
               to: channelID,
@@ -177,22 +177,48 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
             });
 
             const response = await analyzeMostRecentMatch(args[0]);
-          } catch (err) {
-            throw err
-          }
-          break;
-        case 'clashTeam':
-          try {
+            const {
+              top,
+              jungle,
+              mid,
+              carry,
+              support,
+              bans,
+            } = response;
+
+            let responseMessage = 'MOST RECENT GAME:\n\n';
+            responseMessage += 'Team Bans:\n';
+            const bannedChampions = bans
+              .map(ban => championsCache.get(String(ban.championId)).id)
+              .join(', ')
+            responseMessage += `${bannedChampions}\n\n`;
+
+            [top, jungle, mid, carry, support].forEach(player => {
+              const championPlayed = championsCache.get(String(player.championId))
+              responseMessage += `${player.role}: ${player.summoner.summonerName}\n`
+              responseMessage += `${championPlayed.id}    ${player.stats.kills}/${player.stats.deaths}/${player.stats.assists}\n\n`
+            })
+
             bot.sendMessage({
               to: channelID,
-              message: `Grabbing ${args[0]}`,
+              message: responseMessage,
             });
-
-            const response = await analyzeMostRecentMatch(args[0]);
           } catch (err) {
             throw err
           }
           break;
+        // case 'clashteam':
+        //   try {
+        //     bot.sendMessage({
+        //       to: channelID,
+        //       message: `Grabbing ${args[0]}`,
+        //     });
+
+        //     const response = await analyzeMostRecentMatch(args[0]);
+        //   } catch (err) {
+        //     throw err
+        //   }
+        //   break;
         // Just add any case commands if you want to..
         default:
           bot.sendMessage({
