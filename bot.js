@@ -216,7 +216,7 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
             throw err
           }
           break;
-        case 'clashSearch':
+        case 'clashsearch':
           try {
             bot.sendMessage({
               to: channelID,
