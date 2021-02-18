@@ -17,11 +17,8 @@ const analyzeMostRecentMatch = async (summonerName) => {
     let bans = [];
 
     const summoner = await getSummonerByName(summonerName);
-    console.log(summoner)
     const summonerMatches = await getSummonerMatches(summoner.accountId);
-    console.log(summonerMatches)
     const mostRecentMatch = await getMatchData(summonerMatches.matches[0].gameId);
-    console.log(mostRecentMatch)
 
     const summonerParticipantIdentity = mostRecentMatch.participantIdentities
       .find((participant) => summoner.id === participant.player.summonerId)
@@ -38,6 +35,7 @@ const analyzeMostRecentMatch = async (summonerName) => {
       })
       .forEach(player => {
         const { lane, role } = player.timeline;
+        console.log('PLAYER:', player)
         if (lane === 'TOP') {
           player.role = 'Top';
           top = player;
