@@ -14,6 +14,7 @@ const analyzeMostRecentMatch = async (summonerName) => {
     let mid = null;
     let carry = null;
     let support = null;
+    const players = [];
     let bans = [];
 
     const summoner = await getSummonerByName(summonerName);
@@ -35,7 +36,8 @@ const analyzeMostRecentMatch = async (summonerName) => {
       })
       .forEach(player => {
         const { lane, role } = player.timeline;
-        console.log('PLAYER:', player.timeline)
+        console.log('PLAYER:', player.summoner)
+        players.push(player)
         if (lane === 'TOP') {
           player.role = 'Top';
           top = player;
@@ -65,6 +67,7 @@ const analyzeMostRecentMatch = async (summonerName) => {
       mid,
       carry,
       support,
+      players,
       bans,
     })
   } catch (err) {
