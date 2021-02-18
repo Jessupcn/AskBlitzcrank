@@ -1,7 +1,7 @@
 /* eslint-disable max-statements */
 const Discord = require('discord.io');
 const logger = require('winston');
-let auth = require('./auth.json') || {};
+// let auth = require('./auth.json') || {};
 
 // local util imports
 const {
@@ -12,7 +12,8 @@ const {
 const championsCache = require('./championsCache')
 
 // set up tokens from env or local auth file
-const discordToken = process.env.DISCORD_TOKEN || auth.discordToken;
+// const discordToken = process.env.DISCORD_TOKEN || auth.discordToken;
+const discordToken = process.env.DISCORD_TOKEN;
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
