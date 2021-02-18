@@ -198,6 +198,10 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
             responseMessage += `${bannedChampions}\n\n`;
 
             [top, jungle, mid, carry, support].forEach(player => {
+              if (!player) {
+                return;
+              }
+
               const championPlayed = championsCache.get(String(player.championId))
               responseMessage += `${player.role}: ${player.summoner.summonerName} - ${championPlayed.id}    ${player.stats.kills}/${player.stats.deaths}/${player.stats.assists}\n`
             })
@@ -210,18 +214,6 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
             throw err
           }
           break;
-        // case 'clashteam':
-        //   try {
-        //     bot.sendMessage({
-        //       to: channelID,
-        //       message: `Grabbing ${args[0]}`,
-        //     });
-
-        //     const response = await analyzeMostRecentMatch(args[0]);
-        //   } catch (err) {
-        //     throw err
-        //   }
-        //   break;
         // Just add any case commands if you want to..
         default:
           bot.sendMessage({

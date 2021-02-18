@@ -14,7 +14,7 @@ const analyzeMostRecentMatch = async (summonerName) => {
     let mid = null;
     let carry = null;
     let support = null;
-    let bans = null;
+    let bans = [];
 
     const summoner = await getSummonerByName(summonerName);
     console.log(summoner)
