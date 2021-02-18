@@ -41,6 +41,7 @@ bot.on('ready', async () => {
     if (bot.servers[server].channels) {
       const channels = Object.keys(bot.servers[server].channels);
       const healthCheckChannel = channels.find((channelId) => {
+        console.log('channel name', bot.servers[server].channels[channelId].name)
         return bot.servers[server].channels[channelId].name.toLowerCase() === 'askblitzhealth'
       })
       console.log('HEALTH CHECK CHANNEL', healthCheckChannel)
