@@ -36,7 +36,6 @@ const analyzeMostRecentMatch = async (summonerName) => {
       })
       .forEach(player => {
         const { lane, role } = player.timeline;
-        console.log('PLAYER:', {lane, role})
         players.push(player)
         if (lane === 'TOP') {
           player.role = 'Top';
