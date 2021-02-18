@@ -8,6 +8,7 @@ const {
   analyzeRecentMatches,
   analyzeMostRecentMatch,
   fetchChampions,
+  clashSearch,
 } = require('./utils');
 const championsCache = require('./championsCache')
 
@@ -198,15 +199,6 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
               .join(', ')
             responseMessage += `${bannedChampions}\n\n`;
 
-            // [top, jungle, mid, carry, support].forEach(player => {
-            //   if (!player) {
-            //     return;
-            //   }
-
-            //   const championPlayed = championsCache.get(String(player.championId))
-            //   responseMessage += `${player.role}: ${player.summoner.summonerName} - ${championPlayed.id}    ${player.stats.kills}/${player.stats.deaths}/${player.stats.assists}\n`
-            // })
-
             players.forEach(player => {
               if (!player) {
                 return;
@@ -220,6 +212,18 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
               to: channelID,
               message: responseMessage,
             });
+          } catch (err) {
+            throw err
+          }
+          break;
+        case 'clashSearch':
+          try {
+            bot.sendMessage({
+              to: channelID,
+              message: `Searching...`,
+            });
+
+            const response = await clashSearch([args[0], args[1]])
           } catch (err) {
             throw err
           }
