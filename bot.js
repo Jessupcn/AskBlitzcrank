@@ -41,10 +41,7 @@ bot.on('ready', async () => {
     if (bot.servers[server].channels) {
       const channels = Object.keys(bot.servers[server].channels);
       channels.forEach(channelId => {
-        bot.sendMessage({
-          to: channelId,
-          message: `Fired Up!`,
-        });
+        console.log(bot.servers[server].channels)
       });
     }
   }

@@ -17,14 +17,16 @@ const analyzeMostRecentMatch = async (summonerName) => {
     let bans = null;
 
     const summoner = await getSummonerByName(summonerName);
+    console.log(summoner)
     const summonerMatches = await getSummonerMatches(summoner.accountId);
+    console.log(summonerMatches)
     const mostRecentMatch = await getMatchData(summonerMatches.matches[0].gameId);
+    console.log(mostRecentMatch)
 
     const summonerParticipantIdentity = mostRecentMatch.participantIdentities
       .find((participant) => summoner.id === participant.player.summonerId)
     const summonerParticipant = mostRecentMatch.participants
       .find(elem => elem.participantId === summonerParticipantIdentity.participantId)
-    const summonerTeam = summonerParticipant.teamId
 
     // get summoners' data and attach to proper position
     mostRecentMatch.participants
