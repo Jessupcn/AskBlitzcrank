@@ -40,9 +40,27 @@ bot.on('ready', async () => {
   for (const server in bot.servers) {
     if (bot.servers[server].channels) {
       const channels = Object.keys(bot.servers[server].channels);
-      channels.forEach(channelId => {
-        console.log('<><>', bot.servers[server].channels[channelId])
+      const healthCheckChannel = channels.find((channelId) => {
+        return bot.servers[server].channels[channelId].name.toLowerCase() === 'askblitzhealth'
+      })
+      console.log('HEALTH CHECK CHANNEL', healthCheckChannel)
+
+      bot.sendMessage({
+        to: healthCheckChannel,
+        message: 'Fired up!',
       });
+
+      // channels.forEach(channelId => {
+      //   console.log('<><>', bot.servers[server].channels[channelId])
+      //   const channelName = bot.servers[server].channels[channelId].name;
+      //   console.log('CHANNEL NAME', channelName)
+      //   if (channelName.toLowerCase() === 'askblitzhealth') {
+      //     bot.sendMessage({
+      //       to: channelID,
+      //       message: 'Fired up!',
+      //     });
+      //   }
+      // });
     }
   }
 });
