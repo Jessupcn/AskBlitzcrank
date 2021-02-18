@@ -1,7 +1,7 @@
 /* eslint-disable max-statements */
 const Discord = require('discord.io');
 const logger = require('winston');
-const auth = require('./auth.json');
+let auth = require('./auth.json') || {};
 
 // local util imports
 const {
