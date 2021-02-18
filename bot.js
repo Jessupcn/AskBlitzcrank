@@ -38,7 +38,6 @@ bot.on('ready', async () => {
   logger.info(response.status === 200 ? 'Champion data ready.' : 'Champion data grab failed.')
 
   for (const server in bot.servers) {
-    console.log(server)
     if (bot.servers[server].channels) {
       const channels = Object.keys(bot.servers[server].channels);
       // find the healthCheckChannel
