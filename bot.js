@@ -237,7 +237,7 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
 
             console.log('RESPONSE: ', response)
             response.forEach((summonerInfo, idx) => {
-              responseMessage += `${summonerInfo.summoner.name}'s Top Played Champions:`;
+              responseMessage += `${summonerInfo.summoner.name}'s Top Played Champions:\n`;
               summonerInfo.mostPlayedChampions.forEach(champion => {
                 responseMessage += `${champion[0]}: ${champion[1]} play${champion[1] > 1 ? 's' : ''}\n`;
               })
