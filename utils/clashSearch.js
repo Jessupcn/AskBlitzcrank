@@ -17,7 +17,7 @@ const clashSearch = async (summonerArray) => {
     const summonerMatches = await Promise.all(summoners.map(summoner => getSummonerMatches(summoner.accountId)))
     console.log('SUMMONER MATCH', summonerMatches)
 
-    return summonerMatches.matches.map(matches => mostPlayedChampions(matches))
+    return summonerMatches.map(matchesObj => mostPlayedChampions(matchesObj.matches))
   } catch (err) {
     console.error(err)
     throw err;
