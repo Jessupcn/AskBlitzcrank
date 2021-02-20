@@ -16,6 +16,7 @@ const clashSearch = async (summonerArray) => {
     const summonerMatches = await Promise.all(summoners.map(summoner => getSummonerMatches(summoner.accountId)))
 
     return summoners.map((summoner, idx) => {
+      console.log(summonerMatches[idx])
       return {
         summoner,
         mostPlayedChampions: summonerMatches[idx]
