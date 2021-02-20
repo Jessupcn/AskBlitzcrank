@@ -219,12 +219,21 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
           break;
         case 'clashsearch':
           try {
-            bot.sendMessage({
-              to: channelID,
-              message: `Searching...`,
-            });
+            if (!args.length) {
+              bot.sendMessage({
+                to: channelID,
+                message: `Send up to 5 summoners to grab...`,
+              });
+            } else {
+              bot.sendMessage({
+                to: channelID,
+                message: `Searching...`,
+              });
+            }
 
-            const response = await clashSearch([args[0], args[1]])
+
+            const response = await clashSearch([...args.slice(0, 5)])
+            console.log('CLASH RESPONSE:', response)
           } catch (err) {
             throw err
           }
