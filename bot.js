@@ -235,11 +235,10 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
             let responseMessage = '';
             const response = await clashSearch([...args.slice(0, 5)]);
 
-            console.log('RESPONSE: ', response)
             response.forEach((summonerInfo, idx) => {
               responseMessage += `${summonerInfo.summoner.name}'s Top Played Champions:\n`;
               summonerInfo.mostPlayedChampions.forEach((champion, index) => {
-                responseMessage += `${champion[0]}: ${champion[1]} play${champion[1] > 1 ? 's' : ''}${index % 2 ? '\n' : '\t\t\t'}`;
+                responseMessage += `${champion[0]}: ${champion[1]} play${champion[1] > 1 ? 's' : ''}${index % 2 ? '\n' : '\t\t\t\t'}`;
               })
 
               if (idx !== response.length - 1) {
