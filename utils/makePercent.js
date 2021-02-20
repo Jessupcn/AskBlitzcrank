@@ -1,8 +1,9 @@
 const makePercent = (numerator, denominator) => {
-  var value = Number((numerator / denominator) * 100);
-  // Split the input string into two arrays containing integers/decimals
-    var numSplit = String(value).split('.');
-    console.log('NUM SPLIT', numSplit)
+  let value = Number((numerator / denominator) * 100);
+  let numSplit = String(value).split('.');
+  console.log('NUM SPLIT', numSplit.length, numSplit[1].length)
+
+  console.log('test:', numSplit.length === 1, numSplit[1].length > 2)
   // If there is no decimal point or only one decimal place found.
     if (numSplit.length === 1 || numSplit[1].length > 2) {
         // Set the number to two decimal places
