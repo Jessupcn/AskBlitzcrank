@@ -224,6 +224,7 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
                 to: channelID,
                 message: `Send up to 5 summoners to grab...`,
               });
+              return;
             } else {
               bot.sendMessage({
                 to: channelID,
