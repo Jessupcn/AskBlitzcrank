@@ -7,8 +7,9 @@ const logger = require('winston');
 const {
   analyzeRecentMatches,
   analyzeMostRecentMatch,
-  fetchChampions,
   clashSearch,
+  fetchChampions,
+  makePercent,
 } = require('./utils');
 const championsCache = require('./championsCache')
 
@@ -79,7 +80,7 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
         case 'hook':
           bot.sendMessage({
             to: channelID,
-            message: `Blitzcrank hooked ~-~-~-~-~-~c ${args[0]}\n\n...\n\n s/he dead.`,
+            message: `Blitzcrank hooked ~-~-~-~-~-~c ${args.join(' ')}\n\n...\n\n s/he dead.`,
           });
           break;
         case 'refetch':
@@ -150,19 +151,19 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
                 responseMessage += '\nPOSITIONS:\n'
                 const { roleTrend, numRecentSummonerMatches } = trends;
                 if (roleTrend.top) {
-                  responseMessage += `Top: ${(roleTrend.top / numRecentSummonerMatches) * 100}%\n`
+                  responseMessage += `Top: ${makePercent(roleTrend.top, numRecentSummonerMatches)}%\n`
                 }
                 if (roleTrend.jungle) {
-                  responseMessage += `Jungle: ${(roleTrend.jungle / numRecentSummonerMatches) * 100}%\n`
+                  responseMessage += `Jungle: ${makePercent(roleTrend.jungle, numRecentSummonerMatches)}%\n`
                 }
                 if (roleTrend.mid) {
-                  responseMessage += `Mid: ${(roleTrend.mid / numRecentSummonerMatches) * 100}%\n`
+                  responseMessage += `Mid: ${makePercent(roleTrend.mid, numRecentSummonerMatches)}%\n`
                 }
                 if (roleTrend.carry) {
-                  responseMessage += `Carry: ${(roleTrend.carry / numRecentSummonerMatches) * 100}%\n`
+                  responseMessage += `Carry: ${makePercent(roleTrend.carry, numRecentSummonerMatches)}%\n`
                 }
                 if (roleTrend.support) {
-                  responseMessage += `Support: ${(roleTrend.support / numRecentSummonerMatches) * 100}%`
+                  responseMessage += `Support: ${makePercent(roleTrend.support, numRecentSummonerMatches)}%`
                 }
             }
 
