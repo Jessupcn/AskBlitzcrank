@@ -1,3 +1,4 @@
+const mostPlayedChampions = require('./mostPlayedChampions');
 const { getSummonerByName, getSummonerMatches } = require('./summoner');
 
 /**
@@ -14,8 +15,9 @@ const clashSearch = async (summonerArray) => {
     console.log('SUMMONERS', summoners)
 
     const summonerMatches = await Promise.all(summoners.map(summoner => getSummonerMatches(summoner.accountId)))
-    console.log('SUMMONER MATCHES', summonerMatches)
+    console.log('SUMMONER MATCH', summonerMatches[0])
 
+    return summonerMatches.map(matches => mostPlayedChampions(matches))
   } catch (err) {
     console.error(err)
     throw err;
