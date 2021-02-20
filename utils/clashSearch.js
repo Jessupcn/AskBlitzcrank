@@ -20,7 +20,7 @@ const clashSearch = async (summonerArray) => {
         summoner,
         mostPlayedChampions: summonerMatches[idx]
           .matches
-          .map(matchesObj => mostPlayedChampions(matchesObj.matches))
+          .map(matches => mostPlayedChampions(matches))
       }
     })
 
