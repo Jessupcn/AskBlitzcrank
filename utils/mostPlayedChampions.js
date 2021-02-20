@@ -6,7 +6,7 @@ const championsCache = require('../championsCache');
  */
 const mostPlayedChampions = (matchesArray) => {
   const championsCount = {};
-  matchesArray.matches
+  matchesArray
     .forEach(game => {
       // champion used in game
       const championUsed = championsCache.get(String(game.champion));
