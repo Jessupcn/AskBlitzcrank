@@ -235,6 +235,7 @@ bot.on('message', async (user, userID, channelID, message, /* evt */) => {
             let responseMessage = '';
             const response = await clashSearch([...args.slice(0, 5)]);
 
+            console.log('RESPONSE: ', response)
             responseMessage += `${response.summoner.name}'s Top Played Champions:`;
             response.mostPlayedChampions.forEach(champion => {
               responseMessage += `${champion[0]}: ${champion[1]} play${champion[1] > 1 ? 's' : ''}`;
